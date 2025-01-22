@@ -80,7 +80,7 @@ export class EmployeeListComponent {
   confirmDelete(): void {
     if (this.employeeToDelete !== undefined) {
       console.log(this.employeeToDelete + "employee")
-      this.http.delete(`/employees/${this.employeeToDelete}`).subscribe({
+      this.http.delete(`/backend/${this.employeeToDelete}`).subscribe({
         next: () => {
           console.log('Employee deleted successfully:', this.employeeToDelete);
           this.fetchData(); // Refresh the employee list
