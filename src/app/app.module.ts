@@ -10,7 +10,7 @@ import {FormsModule} from "@angular/forms";
 @NgModule({
   declarations: [
     AppComponent,
-    EmployeeListComponent
+    EmployeeListComponentd
   ],
     imports: [
         BrowserModule,
