@@ -21,18 +21,17 @@ export class NewUserComponent {
     [] // skillSet
   );
 
-  // Define available skills
+  // Updated skill options to match valid backend values
   availableSkills = [
     { id: 1, name: 'Java' },
     { id: 2, name: 'Python' },
-    { id: 3, name: 'JavaScript' },
-    { id: 4, name: 'Angular' },
-    { id: 5, name: 'Spring' }
+    { id: 3, name: 'JavaScript' }
   ];
 
   constructor(private http: HttpClient) {}
 
   onSubmit() {
+    // Ensure skillSet is properly formatted
     const employeeData = {
       lastName: this.newEmployee.lastName,
       firstName: this.newEmployee.firstName,
@@ -40,12 +39,13 @@ export class NewUserComponent {
       postcode: this.newEmployee.postcode,
       city: this.newEmployee.city,
       phone: this.newEmployee.phone,
-      skillSet: this.newEmployee.skillSet || []
+      skillSet: this.newEmployee.skillSet && this.newEmployee.skillSet.length > 0
+        ? this.newEmployee.skillSet.map(Number)
+        : []
     };
 
     console.log('Sending data to backend:', employeeData);
 
-    // Changed endpoint from '/employees' back to '/backend'
     this.http.post<Employee>('/backend', employeeData, {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/json')
