@@ -70,7 +70,7 @@
           [(ngModel)]="newEmployee.skillSet"
           multiple
           required>
-          <option *ngFor="let skill of availableSkills" [value]="skill.id">
+          <option *ngFor="let skill of availableSkills" [ngValue]="skill.id">
             {{skill.name}}
           </option>
         </select>
