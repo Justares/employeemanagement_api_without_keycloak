@@ -46,5 +46,5 @@ div[style*="display: flex"] {
 td div {
   display: flex;
   flex-direction: column;
-  align-items: centerd;
+  align-items: center;
 }
