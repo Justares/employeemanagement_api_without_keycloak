@@ -1,11 +1,7 @@
 <h1>LF10-Starter</h1>
 
 <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-  <!-- New User Button oben rechts -->
-  <button
-    (click)="createNewUser()"
-    style="padding: 5px 10px;"
-  >
+  <button (click)="createNewUser()" style="padding: 5px 10px;">
     New User
   </button>
 </div>
@@ -13,33 +9,39 @@
 <table>
   <thead>
   <tr>
-    <!-- Filter für Name mit Search-Button in einer Zeile -->
     <th>
       <div style="display: flex; align-items: center;">
         <input
           type="text"
-          placeholder="Filter Name"
-          [(ngModel)]="nameFilter"
+          placeholder="Filter by ID"
+          [(ngModel)]="idFilter"
           style="padding: 5px; width: calc(100% - 80px); margin-right: 5px;"
         />
         <button (click)="applyFilters()">Search</button>
       </div>
     </th>
-    <!-- Leere Spalte für die Buttons -->
+    <th></th>
+    <th></th>
     <th></th>
   </tr>
   </thead>
   <tbody>
+  <!-- Fehlermeldung anzeigen -->
+  <tr *ngIf="errorMessage">
+    <td colspan="4" style="color: red; text-align: center;">{{ errorMessage }}</td>
+  </tr>
+
+  <!-- Mitarbeiterliste anzeigen -->
   <tr *ngFor="let e of filteredEmployees$ | async">
-    <!-- Name -->
     <td>{{ e.lastName }}, {{ e.firstName }}</td>
-    <!-- Buttons in eigenen Zeilen, nah beieinander -->
-    <td style="text-align: center; vertical-align: middle;">
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <button (click)="showDetails(e.id)" style="margin: 2px;">SHOW</button>
-        <button (click)="editEmployee(e.id)" style="margin: 2px;">EDIT</button>
-        <button (click)="deleteEmployee(e.id)" style="margin: 2px;">X</button>
-      </div>
+    <td style="text-align: center;">
+      <button (click)="showDetails(e.id)" style="margin: 0 2px;">SHOW</button>
+    </td>
+    <td style="text-align: center;">
+      <button (click)="editEmployee(e.id)" style="margin: 0 2px;">EDIT</button>
+    </td>
+    <td style="text-align: center;">
+      <button (click)="deleteEmployee(e.id)" style="margin: 0 2px;">X</button>
     </td>
   </tr>
   </tbody>
