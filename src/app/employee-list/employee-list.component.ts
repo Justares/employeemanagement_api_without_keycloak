@@ -12,8 +12,9 @@ import { Employee } from '../Employee';
 export class EmployeeListComponent {
   employees$: Observable<Employee[]>;
   filteredEmployees$: Observable<Employee[]>;
+  showNewUserModal = false;
 
-  nameFilter: string = ''; // Name-Filter
+  nameFilter: string = '';
 
   constructor(private http: HttpClient) {
     this.employees$ = of([]);
@@ -25,7 +26,7 @@ export class EmployeeListComponent {
     this.employees$ = this.http.get<Employee[]>('/backend', {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
-    this.filteredEmployees$ = this.employees$; // Initial ohne Filter
+    this.filteredEmployees$ = this.employees$;
   }
 
   applyFilters() {
@@ -51,6 +52,13 @@ export class EmployeeListComponent {
   }
 
   createNewUser() {
-    console.log('Create new user clicked');
+    this.showNewUserModal = true;
+  }
+
+  handleModalClose(success: boolean) {
+    this.showNewUserModal = false;
+    if (success) {
+      this.fetchData(); // Refresh the list if a user was created
+    }
   }
 }
