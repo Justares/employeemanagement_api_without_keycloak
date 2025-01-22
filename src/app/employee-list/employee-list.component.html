@@ -1,7 +1,46 @@
 <h1>LF10-Starter</h1>
-Wenn Sie in der EmployeeListComponent.ts ein gültiges Bearer-Token eintragen, sollten hier die Namen der in der Datenbank gespeicherten Mitarbeiter angezeigt werden!
-<ul>
-  <li *ngFor="let e of employees$ | async">
-    {{e.lastName }}, {{e.firstName}}
-  </li>
-</ul>
+
+<div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+  <!-- New User Button oben rechts -->
+  <button
+    (click)="createNewUser()"
+    style="padding: 5px 10px;"
+  >
+    New User
+  </button>
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <!-- Filter für Name mit Search-Button in einer Zeile -->
+    <th>
+      <div style="display: flex; align-items: center;">
+        <input
+          type="text"
+          placeholder="Filter Name"
+          [(ngModel)]="nameFilter"
+          style="padding: 5px; width: calc(100% - 80px); margin-right: 5px;"
+        />
+        <button (click)="applyFilters()">Search</button>
+      </div>
+    </th>
+    <!-- Leere Spalte für die Buttons -->
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let e of filteredEmployees$ | async">
+    <!-- Name -->
+    <td>{{ e.lastName }}, {{ e.firstName }}</td>
+    <!-- Buttons in eigenen Zeilen, nah beieinander -->
+    <td style="text-align: center; vertical-align: middle;">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <button (click)="showDetails(e.id)" style="margin: 2px;">SHOWd</button>
+        <button (click)="editEmployee(e.id)" style="margin: 2px;">EDIT</button>
+        <button (click)="deleteEmployee(e.id)" style="margin: 2px;">X</button>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
