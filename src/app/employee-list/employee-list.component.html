@@ -44,3 +44,11 @@
   </tr>
   </tbody>
 </table>
+
+<app-confirmation-dialog
+  *ngIf="showConfirmation"
+  [message]="'Are you sure you want to delete this employee?'"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+></app-confirmation-dialog>
+
