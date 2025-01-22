@@ -1,0 +1,85 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h2>Create New User</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          [(ngModel)]="newEmployee.lastName"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          [(ngModel)]="newEmployee.firstName"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="street">Street:</label>
+        <input
+          type="text"
+          id="street"
+          name="street"
+          [(ngModel)]="newEmployee.street"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="postcode">Postcode:</label>
+        <input
+          type="text"
+          id="postcode"
+          name="postcode"
+          [(ngModel)]="newEmployee.postcode"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City:</label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          [(ngModel)]="newEmployee.city"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          [(ngModel)]="newEmployee.phone"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="skillSet">Skill Set:</label>
+        <select
+          id="skillSet"
+          name="skillSet"
+          [(ngModel)]="newEmployee.skillSet"
+          multiple
+          required>
+          <option *ngFor="let skill of availableSkills" [value]="skill.id">
+            {{skill.name}}
+          </option>
+        </select>
+      </div>
+
+      <div class="button-group">
+        <button type="button" (click)="onCancel()">Cancel</button>
+        <button type="submit">Create User</button>
+      </div>
+    </form>
+  </div>
+</div>

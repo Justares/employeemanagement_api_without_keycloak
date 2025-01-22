@@ -12,7 +12,7 @@ import { Employee } from '../Employee';
 export class EmployeeListComponent {
   employees$: Observable<Employee[]>;
   filteredEmployees$: Observable<Employee[]>;
-
+  showNewUserModal = false;
   idFilter: string = ''; // ID-Filter
   errorMessage: string | null = null; // Fehlermeldung
 
@@ -26,7 +26,7 @@ export class EmployeeListComponent {
     this.employees$ = this.http.get<Employee[]>('http://localhost:8089/employees', {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
-    this.filteredEmployees$ = this.employees$; // Initial ohne Filter
+    this.filteredEmployees$ = this.employees$;
   }
 
   applyFilters() {
@@ -72,6 +72,13 @@ export class EmployeeListComponent {
   }
 
   createNewUser() {
-    console.log('Create new user clicked');
+    this.showNewUserModal = true;
+  }
+
+  handleModalClose(success: boolean) {
+    this.showNewUserModal = false;
+    if (success) {
+      this.fetchData(); // Refresh the list if a user was created
+    }
   }
 }
