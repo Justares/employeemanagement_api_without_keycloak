@@ -12,6 +12,11 @@ import { Employee } from '../Employee';
 export class EmployeeListComponent {
   employees$: Observable<Employee[]>;
   filteredEmployees$: Observable<Employee[]>;
+  nameFilter: string = ''; // Name filter
+
+  showConfirmation: boolean = false; // Confirmation dialog state
+  employeeToDelete: number | undefined = undefined; // ID of the employee to delete
+
   showNewUserModal = false;
   idFilter: string = ''; // ID-Filter
   errorMessage: string | null = null; // Fehlermeldung
@@ -26,7 +31,7 @@ export class EmployeeListComponent {
     this.employees$ = this.http.get<Employee[]>('http://localhost:8089/employees', {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
-    this.filteredEmployees$ = this.employees$;
+    this.filteredEmployees$ = this.employees$; // Initial state without filters
   }
 
   applyFilters() {
@@ -68,7 +73,36 @@ export class EmployeeListComponent {
   }
 
   deleteEmployee(id: number | undefined) {
-    console.log('Delete employee with ID:', id);
+    this.showConfirmation = true; // Show the confirmation dialog
+    this.employeeToDelete = id; // Store the employee's ID
+  }
+
+  confirmDelete(): void {
+    if (this.employeeToDelete !== undefined) {
+      console.log(this.employeeToDelete + "employee")
+      this.http.delete(`/employees/${this.employeeToDelete}`).subscribe({
+        next: () => {
+          console.log('Employee deleted successfully:', this.employeeToDelete);
+          this.fetchData(); // Refresh the employee list
+        },
+        error: (error) => {
+          console.error('Error deleting employee:', error);
+        },
+        complete: () => {
+          console.log('Delete request completed.');
+        }
+      });
+
+      // Reset the state
+      this.employeeToDelete = undefined;
+      this.showConfirmation = false;
+    }
+  }
+
+
+  cancelDelete(): void {
+    this.showConfirmation = false; // Close the confirmation dialog
+    this.employeeToDelete = undefined; // Reset the stored ID
   }
 
   createNewUser() {
