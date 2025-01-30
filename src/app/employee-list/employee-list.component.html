@@ -13,8 +13,9 @@
       <div style="display: flex; align-items: center;">
         <input
           type="text"
-          placeholder="Filter by ID"
+          placeholder="Filter by ID or Name"
           [(ngModel)]="idFilter"
+          (keydown.enter)="applyFilters()"
           style="padding: 5px; width: calc(100% - 80px); margin-right: 5px;"
         />
         <button (click)="applyFilters()">Search</button>

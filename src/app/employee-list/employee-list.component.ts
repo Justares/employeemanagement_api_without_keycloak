@@ -58,9 +58,18 @@ export class EmployeeListComponent {
         })
       );
     } else {
-      // Wenn die Eingabe ungültig ist (keine positive Zahl), zeige keine Benutzer an
-      this.errorMessage = 'Ungültige ID. Bitte geben Sie eine positive Zahl ein.'; // Fehlermeldung setzen
-      this.filteredEmployees$ = of([]);
+      // Wenn die Eingabe Buchstaben enthält, suchen wir nach dem Namen (lokal)
+      this.filteredEmployees$ = this.employees$.pipe(
+        map(employees => {
+          const filtered = employees.filter(e =>
+            (`${e.lastName}, ${e.firstName}`.toLowerCase().includes(input.toLowerCase()))
+          );
+          if (filtered.length === 0) {
+            this.errorMessage = 'Keine Benutzer mit diesem Namen gefunden.'; // Fehlermeldung setzen
+          }
+          return filtered;
+        })
+      );
     }
   }
 
