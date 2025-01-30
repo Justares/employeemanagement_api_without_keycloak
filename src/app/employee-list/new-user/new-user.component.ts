@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Employee } from '../../Employee';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-new-user',
@@ -10,19 +11,20 @@ import { Employee } from '../../Employee';
 export class NewUserComponent {
   @Output() closeModal = new EventEmitter<boolean>();
   submitting = false;
+  errorMessage: string | null = null;
+  submitted = false;
 
   newEmployee = new Employee(
-    undefined, // id
-    '', // lastName
-    '', // firstName
-    '', // street
-    '', // postcode
-    '', // city
-    '', // phone
-    [] // skillSet
+    undefined,
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    []
   );
 
-  // Available skills (we keep the names for display purposes)
   availableSkills = [
     { id: 7, skill: 'Java' },
     { id: 8, skill: 'Angular' }
@@ -30,11 +32,23 @@ export class NewUserComponent {
 
   constructor(private http: HttpClient) {}
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
+    this.submitted = true;
+    this.errorMessage = null;
+
+    if (form.invalid) {
+      this.errorMessage = 'Please fill in all required fields correctly.';
+      return;
+    }
+
+    if (!this.newEmployee.skillSet || this.newEmployee.skillSet.length === 0) {
+      this.errorMessage = 'Please select at least one skill.';
+      return;
+    }
+
     if (this.submitting) return;
     this.submitting = true;
 
-    // Create request body exactly as Swagger shows
     const employeeData = {
       lastName: this.newEmployee.lastName,
       firstName: this.newEmployee.firstName,
@@ -42,14 +56,11 @@ export class NewUserComponent {
       postcode: this.newEmployee.postcode,
       city: this.newEmployee.city,
       phone: this.newEmployee.phone,
-      skillSet: this.newEmployee.skillSet  // This is already an array of numbers
+      skillSet: this.newEmployee.skillSet
     };
 
-    console.log('Sending data to backend:', employeeData);
-
     this.http.post<Employee>('/backend', employeeData, {
-      headers: new HttpHeaders()
-        .set('Content-Type', 'application/json')
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
     }).subscribe({
       next: (response) => {
         console.log('User created successfully:', response);
@@ -58,13 +69,22 @@ export class NewUserComponent {
       },
       error: (error) => {
         console.error('Error creating user:', error);
-        console.error('Error details:', error.error);
         this.submitting = false;
+        if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = 'An error occurred while creating the user.';
+        }
       }
     });
   }
 
   onCancel() {
     this.closeModal.emit(false);
+  }
+
+  hasError(form: NgForm, fieldName: string): boolean {
+    const field = form.form.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched || this.submitted));
   }
 }
