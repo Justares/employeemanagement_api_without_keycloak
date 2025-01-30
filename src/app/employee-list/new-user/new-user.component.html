@@ -1,6 +1,6 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <h2>Create New User</h2>
+    <h2>{{ mode === 'create' ? 'Create New User' : mode === 'view' ? 'User Details' : 'Edit User' }}</h2>
     <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
       <!-- Error message area -->
       <div *ngIf="errorMessage" class="error-message">
@@ -16,7 +16,8 @@
           [(ngModel)]="newEmployee.lastName"
           required
           #lastName="ngModel"
-          [class.is-invalid]="hasError(userForm, 'lastName')">
+          [class.is-invalid]="hasError(userForm, 'lastName')"
+          [disabled]="isViewMode()">
         <div class="invalid-feedback" *ngIf="hasError(userForm, 'lastName')">
           Last Name is required
         </div>
@@ -31,7 +32,8 @@
           [(ngModel)]="newEmployee.firstName"
           required
           #firstName="ngModel"
-          [class.is-invalid]="hasError(userForm, 'firstName')">
+          [class.is-invalid]="hasError(userForm, 'firstName')"
+          [disabled]="isViewMode()">
         <div class="invalid-feedback" *ngIf="hasError(userForm, 'firstName')">
           First Name is required
         </div>
@@ -46,7 +48,8 @@
           [(ngModel)]="newEmployee.street"
           required
           #street="ngModel"
-          [class.is-invalid]="hasError(userForm, 'street')">
+          [class.is-invalid]="hasError(userForm, 'street')"
+          [disabled]="isViewMode()">
         <div class="invalid-feedback" *ngIf="hasError(userForm, 'street')">
           Street is required
         </div>
@@ -62,7 +65,8 @@
           required
           pattern="[0-9]{5}"
           #postcode="ngModel"
-          [class.is-invalid]="hasError(userForm, 'postcode')">
+          [class.is-invalid]="hasError(userForm, 'postcode')"
+          [disabled]="isViewMode()">
         <div class="invalid-feedback" *ngIf="hasError(userForm, 'postcode')">
           Please enter a valid 5-digit postcode
         </div>
@@ -77,7 +81,8 @@
           [(ngModel)]="newEmployee.city"
           required
           #city="ngModel"
-          [class.is-invalid]="hasError(userForm, 'city')">
+          [class.is-invalid]="hasError(userForm, 'city')"
+          [disabled]="isViewMode()">
         <div class="invalid-feedback" *ngIf="hasError(userForm, 'city')">
           City is required
         </div>
@@ -93,7 +98,8 @@
           required
           pattern="[0-9]{11}"
           #phone="ngModel"
-          [class.is-invalid]="hasError(userForm, 'phone')">
+          [class.is-invalid]="hasError(userForm, 'phone')"
+          [disabled]="isViewMode()">
         <div class="invalid-feedback" *ngIf="hasError(userForm, 'phone')">
           Please enter a valid 11-digit phone number
         </div>
@@ -108,7 +114,8 @@
           multiple
           required
           #skillSet="ngModel"
-          [class.is-invalid]="hasError(userForm, 'skillSet')">
+          [class.is-invalid]="hasError(userForm, 'skillSet')"
+          [disabled]="isViewMode()">
           <option *ngFor="let skill of availableSkills" [ngValue]="skill.id">
             {{skill.skill}}
           </option>
@@ -120,8 +127,8 @@
 
       <div class="button-group">
         <button type="button" (click)="onCancel()" [disabled]="submitting">Cancel</button>
-        <button type="submit" [disabled]="submitting">
-          {{submitting ? 'Creating...' : 'Create User'}}
+        <button *ngIf="mode !== 'view'" type="submit" [disabled]="submitting">
+          {{submitting ? (mode === 'create' ? 'Creating...' : 'Updating...') : (mode === 'create' ? 'Create User' : 'Update User')}}
         </button>
       </div>
     </form>

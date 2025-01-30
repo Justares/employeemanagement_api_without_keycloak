@@ -59,5 +59,7 @@
 <!-- Modal component -->
 <app-new-user
   *ngIf="showNewUserModal"
+  [mode]="mode"
+  [employeeId]="employeeId"
   (closeModal)="handleModalClose($event)">
 </app-new-user>

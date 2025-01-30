@@ -73,12 +73,23 @@ export class EmployeeListComponent {
     }
   }
 
+  mode: 'create' | 'view' | 'edit' = 'create';
+  employeeId: number | undefined;
+
   showDetails(id: number | undefined) {
-    console.log('Show details for ID:', id);
+    if (id !== undefined) {
+      this.employeeId = id;
+      this.mode = 'view';
+      this.showNewUserModal = true;
+    }
   }
 
   editEmployee(id: number | undefined) {
-    console.log('Edit employee with ID:', id);
+    if (id !== undefined) {
+      this.employeeId = id;
+      this.mode = 'edit';
+      this.showNewUserModal = true;
+    }
   }
 
   deleteEmployee(id: number | undefined) {
