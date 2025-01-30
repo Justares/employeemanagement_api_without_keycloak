@@ -9,6 +9,7 @@ import { Employee } from '../../Employee';
 })
 export class NewUserComponent {
   @Output() closeModal = new EventEmitter<boolean>();
+  submitting = false;
 
   newEmployee = new Employee(
     undefined, // id
@@ -21,17 +22,19 @@ export class NewUserComponent {
     [] // skillSet
   );
 
-  // Updated skill options to match valid backend values
+  // Available skills (we keep the names for display purposes)
   availableSkills = [
-    { id: 1, name: 'Java' },
-    { id: 2, name: 'Python' },
-    { id: 3, name: 'JavaScript' }
+    { id: 7, skill: 'Java' },
+    { id: 8, skill: 'Angular' }
   ];
 
   constructor(private http: HttpClient) {}
 
   onSubmit() {
-    // Ensure skillSet is properly formatted
+    if (this.submitting) return;
+    this.submitting = true;
+
+    // Create request body exactly as Swagger shows
     const employeeData = {
       lastName: this.newEmployee.lastName,
       firstName: this.newEmployee.firstName,
@@ -39,9 +42,7 @@ export class NewUserComponent {
       postcode: this.newEmployee.postcode,
       city: this.newEmployee.city,
       phone: this.newEmployee.phone,
-      skillSet: this.newEmployee.skillSet && this.newEmployee.skillSet.length > 0
-        ? this.newEmployee.skillSet.map(Number)
-        : []
+      skillSet: this.newEmployee.skillSet  // This is already an array of numbers
     };
 
     console.log('Sending data to backend:', employeeData);
@@ -52,13 +53,13 @@ export class NewUserComponent {
     }).subscribe({
       next: (response) => {
         console.log('User created successfully:', response);
+        this.submitting = false;
         this.closeModal.emit(true);
       },
       error: (error) => {
         console.error('Error creating user:', error);
-        if (error.error) {
-          console.error('Error details:', error.error);
-        }
+        console.error('Error details:', error.error);
+        this.submitting = false;
       }
     });
   }
