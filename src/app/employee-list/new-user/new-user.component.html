@@ -1,7 +1,12 @@
 <div class="modal-overlay">
   <div class="modal-content">
     <h2>Create New User</h2>
-    <form (ngSubmit)="onSubmit()">
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+      <!-- Error message area -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
       <div class="form-group">
         <label for="lastName">Last Name:</label>
         <input
@@ -9,7 +14,12 @@
           id="lastName"
           name="lastName"
           [(ngModel)]="newEmployee.lastName"
-          required>
+          required
+          #lastName="ngModel"
+          [class.is-invalid]="hasError(userForm, 'lastName')">
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'lastName')">
+          Last Name is required
+        </div>
       </div>
 
       <div class="form-group">
@@ -19,7 +29,12 @@
           id="firstName"
           name="firstName"
           [(ngModel)]="newEmployee.firstName"
-          required>
+          required
+          #firstName="ngModel"
+          [class.is-invalid]="hasError(userForm, 'firstName')">
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'firstName')">
+          First Name is required
+        </div>
       </div>
 
       <div class="form-group">
@@ -29,7 +44,12 @@
           id="street"
           name="street"
           [(ngModel)]="newEmployee.street"
-          required>
+          required
+          #street="ngModel"
+          [class.is-invalid]="hasError(userForm, 'street')">
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'street')">
+          Street is required
+        </div>
       </div>
 
       <div class="form-group">
@@ -39,7 +59,13 @@
           id="postcode"
           name="postcode"
           [(ngModel)]="newEmployee.postcode"
-          required>
+          required
+          pattern="[0-9]{5}"
+          #postcode="ngModel"
+          [class.is-invalid]="hasError(userForm, 'postcode')">
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'postcode')">
+          Please enter a valid 5-digit postcode
+        </div>
       </div>
 
       <div class="form-group">
@@ -49,7 +75,12 @@
           id="city"
           name="city"
           [(ngModel)]="newEmployee.city"
-          required>
+          required
+          #city="ngModel"
+          [class.is-invalid]="hasError(userForm, 'city')">
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'city')">
+          City is required
+        </div>
       </div>
 
       <div class="form-group">
@@ -59,7 +90,13 @@
           id="phone"
           name="phone"
           [(ngModel)]="newEmployee.phone"
-          required>
+          required
+          pattern="[0-9]{11}"
+          #phone="ngModel"
+          [class.is-invalid]="hasError(userForm, 'phone')">
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'phone')">
+          Please enter a valid 11-digit phone number
+        </div>
       </div>
 
       <div class="form-group">
@@ -69,16 +106,23 @@
           name="skillSet"
           [(ngModel)]="newEmployee.skillSet"
           multiple
-          required>
+          required
+          #skillSet="ngModel"
+          [class.is-invalid]="hasError(userForm, 'skillSet')">
           <option *ngFor="let skill of availableSkills" [ngValue]="skill.id">
             {{skill.skill}}
           </option>
         </select>
+        <div class="invalid-feedback" *ngIf="hasError(userForm, 'skillSet')">
+          Please select at least one skill
+        </div>
       </div>
 
       <div class="button-group">
-        <button type="button" (click)="onCancel()">Cancel</button>
-        <button type="submit">Create User</button>
+        <button type="button" (click)="onCancel()" [disabled]="submitting">Cancel</button>
+        <button type="submit" [disabled]="submitting">
+          {{submitting ? 'Creating...' : 'Create User'}}
+        </button>
       </div>
     </form>
   </div>
