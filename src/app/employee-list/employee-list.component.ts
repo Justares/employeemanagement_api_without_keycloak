@@ -126,6 +126,9 @@ export class EmployeeListComponent {
   }
 
   createNewUser() {
+    console.log("Opening New User Modal"); // Debugging
+    this.mode = 'create';
+    this.employeeId = undefined;
     this.showNewUserModal = true;
   }
 
