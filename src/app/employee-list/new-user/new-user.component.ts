@@ -111,7 +111,7 @@ export class NewUserComponent implements OnInit {
         }
       });
     } else if (this.mode === 'edit' && this.employeeId) {
-      this.http.put<Employee>(`/employees/${this.employeeId}`, employeeData, {
+      this.http.put<Employee>(`/backend/${this.employeeId}`, employeeData, {
         headers: new HttpHeaders().set('Content-Type', 'application/json')
       }).subscribe({
         next: (response) => {
