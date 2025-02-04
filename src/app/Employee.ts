@@ -9,5 +9,6 @@ export class Employee {
     public phone?: string,
     public skillSet?: number[]
   ) {
+    this.skillSet = skillSet || [];
   }
 }

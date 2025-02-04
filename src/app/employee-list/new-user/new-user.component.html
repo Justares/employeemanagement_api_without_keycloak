@@ -105,26 +105,6 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="skillSet">Skill Set:</label>
-        <select
-          id="skillSet"
-          name="skillSet"
-          [(ngModel)]="newEmployee.skillSet"
-          multiple
-          required
-          #skillSet="ngModel"
-          [class.is-invalid]="hasError(userForm, 'skillSet')"
-          [disabled]="isViewMode()">
-          <option *ngFor="let skill of availableSkills" [ngValue]="skill.id">
-            {{skill.skill}}
-          </option>
-        </select>
-        <div class="invalid-feedback" *ngIf="hasError(userForm, 'skillSet')">
-          Please select at least one skill
-        </div>
-      </div>
-
       <div class="button-group">
         <button type="button" (click)="onCancel()" [disabled]="submitting">Cancel</button>
         <button *ngIf="mode !== 'view'" type="submit" [disabled]="submitting">

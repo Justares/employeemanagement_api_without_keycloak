@@ -9,13 +9,14 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./new-user.component.css']
 })
 export class NewUserComponent implements OnInit {
-  @Input() mode: 'create' | 'view' | 'edit' = 'create'; // Default mode is 'create'
-  @Input() employeeId: number | undefined; // ID of the employee to view/edit
+  @Input() mode: 'create' | 'view' | 'edit' = 'create';
+  @Input() employeeId: number | undefined;
   @Output() closeModal = new EventEmitter<boolean>();
 
   submitting = false;
   errorMessage: string | null = null;
   submitted = false;
+  skillSetText = '';
 
   newEmployee = new Employee(
     undefined,
@@ -25,23 +26,16 @@ export class NewUserComponent implements OnInit {
     '',
     '',
     '',
-    []
+    []  // Initialize with empty array
   );
-
-  availableSkills = [
-    { id: 7, skill: 'Java' },
-    { id: 8, skill: 'Angular' }
-  ];
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     if (this.mode === 'create') {
-      this.resetForm(); // Reset the form for create mode
-    } else { // @ts-ignore
-      if (this.mode !== 'create' && this.employeeId) {
-            this.fetchEmployeeDetails(this.employeeId);
-          }
+      this.resetForm();
+    } else if (this.employeeId) {
+      this.fetchEmployeeDetails(this.employeeId);
     }
   }
 
@@ -54,14 +48,16 @@ export class NewUserComponent implements OnInit {
       '',
       '',
       '',
-      []
+      []  // Reset with empty array
     );
+    this.skillSetText = '';
   }
 
   fetchEmployeeDetails(id: number) {
-    this.http.get<Employee>(`http://localhost:8089/employees/${id}`).subscribe({
+    this.http.get<Employee>(`/backend/${id}`).subscribe({
       next: (employee) => {
         this.newEmployee = employee;
+        this.skillSetText = '';
       },
       error: (error) => {
         console.error('Error fetching employee details:', error);
@@ -71,7 +67,7 @@ export class NewUserComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (this.mode === 'view') return; // Do nothing in view mode
+    if (this.mode === 'view') return;
 
     this.submitted = true;
     this.errorMessage = null;
@@ -81,8 +77,8 @@ export class NewUserComponent implements OnInit {
       return;
     }
 
-    if (!this.newEmployee.skillSet || this.newEmployee.skillSet.length === 0) {
-      this.errorMessage = 'Please select at least one skill.';
+    if (!this.skillSetText.trim()) {
+      this.errorMessage = 'Please enter your skill set.';
       return;
     }
 
@@ -96,7 +92,7 @@ export class NewUserComponent implements OnInit {
       postcode: this.newEmployee.postcode,
       city: this.newEmployee.city,
       phone: this.newEmployee.phone,
-      skillSet: this.newEmployee.skillSet
+      skillSet: []  // Send empty array
     };
 
     if (this.mode === 'create') {
@@ -115,7 +111,7 @@ export class NewUserComponent implements OnInit {
         }
       });
     } else if (this.mode === 'edit' && this.employeeId) {
-      this.http.put<Employee>(`/backend/${this.employeeId}`, employeeData, {
+      this.http.put<Employee>(`/employees/${this.employeeId}`, employeeData, {
         headers: new HttpHeaders().set('Content-Type', 'application/json')
       }).subscribe({
         next: (response) => {
