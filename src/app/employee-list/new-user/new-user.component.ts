@@ -77,10 +77,6 @@ export class NewUserComponent implements OnInit {
       return;
     }
 
-    if (!this.skillSetText.trim()) {
-      this.errorMessage = 'Please enter your skill set.';
-      return;
-    }
 
     if (this.submitting) return;
     this.submitting = true;

@@ -105,22 +105,6 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="skillSet">Skill Set:</label>
-        <input
-          type="text"
-          id="skillSet"
-          name="skillSetText"
-          [(ngModel)]="skillSetText"
-          required
-          #skillSetInput="ngModel"
-          [class.is-invalid]="hasError(userForm, 'skillSetText')"
-          [disabled]="isViewMode()">
-        <div class="invalid-feedback" *ngIf="hasError(userForm, 'skillSetText')">
-          Please enter your skill set
-        </div>
-      </div>
-
       <div class="button-group">
         <button type="button" (click)="onCancel()" [disabled]="submitting">Cancel</button>
         <button *ngIf="mode !== 'view'" type="submit" [disabled]="submitting">
