@@ -1,7 +1,7 @@
-<h1>LF10-Starter</h1>
+<div style="height: 10px;"></div>
 
 <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-  <button (click)="createNewUser()" style="padding: 5px 10px;">
+  <button (click)="createNewUser()" style="padding: 15px 15px;">
     New User
   </button>
 </div>
@@ -27,22 +27,20 @@
   </tr>
   </thead>
   <tbody>
-  <!-- Fehlermeldung anzeigen -->
   <tr *ngIf="errorMessage">
     <td colspan="4" style="color: red; text-align: center;">{{ errorMessage }}</td>
   </tr>
 
-  <!-- Mitarbeiterliste anzeigen -->
   <tr *ngFor="let e of filteredEmployees$ | async">
-    <td>{{ e.lastName }}, {{ e.firstName }}</td>
-    <td style="text-align: center;">
-      <button (click)="showDetails(e.id)" style="margin: 0 2px;">SHOW</button>
+    <td>{{ e.id }} - {{ e.lastName }}, {{ e.firstName }}</td>
+    <td>
+      <button (click)="showDetails(e.id)" style="padding: 8px 12px; margin: 0;">SHOW</button>
     </td>
-    <td style="text-align: center;">
-      <button (click)="editEmployee(e.id)" style="margin: 0 2px;">EDIT</button>
+    <td>
+      <button (click)="editEmployee(e.id)" style="padding: 8px 12px; margin: 0;">EDIT</button>
     </td>
-    <td style="text-align: center;">
-      <button (click)="deleteEmployee(e.id)" style="margin: 0 2px;">X</button>
+    <td>
+      <button (click)="deleteEmployee(e.id)" style="padding: 8px 12px; margin: 0;">X</button>
     </td>
   </tr>
   </tbody>
@@ -52,11 +50,9 @@
   *ngIf="showConfirmation"
   [message]="'Are you sure you want to delete this employee?'"
   (confirm)="confirmDelete()"
-  (cancel)="cancelDelete()"
-></app-confirmation-dialog>
+  (cancel)="cancelDelete()">
+</app-confirmation-dialog>
 
-
-<!-- Modal component -->
 <app-new-user
   *ngIf="showNewUserModal"
   [mode]="mode"
